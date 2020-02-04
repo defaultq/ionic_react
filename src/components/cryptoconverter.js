@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 
-class Converter extends Component {
+class CryptoConverter extends Component {
   state = {
-    currencies: ["USD", "AUD", "SGD", "PHP", "EUR"],
-    base: "USD",
+    currencies: ["BTC", "ETH", "XRP", "BCH", "USDT"],
+    base: "BTC",
     amount: "",
-    convertTo: "EUR",
+    convertTo: "ETH",
     result: "",
     date: ""
   };
@@ -42,8 +42,8 @@ class Converter extends Component {
               }})
         .then(res => res.json())
         .then(data => {
-          console.log(data);
-          const date = data.date;
+            console.log(data);
+          const date = data.time.slice(0,10);
           const result = (data.rate * amount).toFixed(10);
           this.setState({
             result,
@@ -149,4 +149,4 @@ class Converter extends Component {
   }
 }
 
-export default Converter;
+export default CryptoConverter;

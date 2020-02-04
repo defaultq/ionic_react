@@ -1,6 +1,6 @@
 import React from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-
+import CryptoConverter from '../components/cryptoconverter';
 const Tab3Page: React.FC = () => {
   return (
     <IonPage>
@@ -9,7 +9,7 @@ const Tab3Page: React.FC = () => {
           <IonTitle>Tab Three</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent></IonContent>
+      <IonContent><CryptoConverter></CryptoConverter></IonContent>
     </IonPage>
   );
 };
