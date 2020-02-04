@@ -1,4 +1,16 @@
 import React, { Component } from "react";
+import {
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
+   IonIcon,
+  IonItem,
+  IonList,
+  IonRow,
+  IonCol,IonInput,IonSelect,IonSelectOption,IonButton, IonApp, 
+} from '@ionic/react';
 
 class Converter extends Component {
   state = {
@@ -43,7 +55,7 @@ class Converter extends Component {
         .then(res => res.json())
         .then(data => {
           console.log(data);
-          const date = data.date;
+          const date = data.time.slice(0,10);
           const result = (data.rate * amount).toFixed(10);
           this.setState({
             result,
@@ -69,83 +81,81 @@ class Converter extends Component {
   render() {
     const { currencies, base, amount, convertTo, result, date } = this.state;
     return (
-      <div className="container my-5">
-        <div className="row">
-          <div className="col-lg-6 mx-auto">
-            <div className="card card-body">
-              <h5>
-                {amount} {base} is equevalent to
-              </h5>
-              <h2>
-                {amount === ""
-                  ? "0"
-                  : result === null
-                  ? "Calculating..."
-                  : result}{" "}
-                {convertTo}
-              </h2>
-              <p>As of {amount === "" ? "/ / /" : date === null ? "" : date}</p>
-              <div className="row">
-                <div className="col-lg-10">
-                  <form className="form-inline mb-4">
-                    <input
-                      type="number"
-                      value={amount}
-                      onChange={this.handleInput}
-                      className="form-control form-control-lg mx-3"
-                    />
-                    <select
-                      name="base"
-                      value={base}
-                      onChange={this.handleSelect}
-                      className="form-control form-control-lg"
-                    >
-                      {currencies.map(currency => (
-                        <option key={currency} value={currency}>
-                          {currency}
-                        </option>
-                      ))}
-                    </select>
-                  </form>
-                  </div>
-                  <div className="col-lg-10">
-                  <form className="form-inline mb-4">
-                    <input
-                      disabled={true}
-                      value={
-                        amount === ""
-                          ? "0"
-                          : result === null
-                          ? "Calculating..."
-                          : result
-                      }
-                      className="form-control form-control-lg mx-3"
-                    />
-                    <select
-                      name="convertTo"
-                      value={convertTo}
-                      onChange={this.handleSelect}
-                      className="form-control form-control-lg"
-                    >
-                      {currencies.map(currency => (
-                        <option key={currency} value={currency}>
-                          {currency}
-                        </option>
-                      ))}
-                    </select>
-                  </form>
-                </div>
-                <div className="col-lg-2 align-self-center">
-                  <h1 onClick={this.handleSwap} className="swap">
-                    &#8595;&#8593;
-                  </h1>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+      <IonApp>
+          <IonRow>
+                <IonCol> 
+                  <IonCard>
+                      <IonCardHeader>
+                          <IonCardTitle> Converter</IonCardTitle>
+                      </IonCardHeader>
+                      <IonCard>
+
+                        <IonCardHeader>
+                          <IonCardSubtitle>{amount} {base} is equevalent to</IonCardSubtitle>
+                          <IonCardTitle>{amount === ""
+                                ? "0"
+                                : result === null
+                                ? "Calculating..."
+                                : result}{" "}
+                              {convertTo}</IonCardTitle>
+                        </IonCardHeader>
+                        <IonCardContent>
+                        <p>As of {amount === "" ? "/ / /" : date === null ? "" : date}</p>
+                        </IonCardContent>
+                        </IonCard>
+                        
+                      <IonCardContent>
+                        <IonInput type="number" value={amount} placeholder="0" onIonChange={this.handleInput} ></IonInput>
+                        <IonList>
+                          <IonItem>
+                            <IonSelect name="base"
+                                  value={base}
+                                  onIonChange={this.handleSelect}>
+                                  {currencies.map(currency => (
+                                <IonSelectOption key={currency} value={currency}>
+                                    {currency}
+                                </IonSelectOption>
+                                ))}
+                            </IonSelect>
+                          </IonItem>
+                        </IonList>
+                      </IonCardContent>
+                      <IonCardContent>
+                        <IonInput disabled={true}
+                                value={
+                                  amount === ""
+                                    ? "0"
+                                    : result === null
+                                    ? "Calculating..."
+                                    : result
+                                } ></IonInput>
+                        <IonList>
+                          <IonItem>
+                            <IonSelect name="convertTo"
+                                value={convertTo}
+                                onIonChange={this.handleSelect} cancelText="Dismiss">
+                                  {currencies.map(currency => (
+                                <IonSelectOption key={currency} value={currency}>
+                                    {currency}
+                                </IonSelectOption>
+                                ))}
+                            </IonSelect>
+                          </IonItem>
+                        </IonList>
+                      </IonCardContent>
+                      <IonCardContent>
+                      
+                      <IonButton onIonClick={this.handleSwap}>
+                          <IonIcon icon="swap"/>
+                      </IonButton>
+                      
+                   
+                      </IonCardContent>
+                    </IonCard>
+                </IonCol>
+          </IonRow>
+    </IonApp>
+     );
   }
 }
 

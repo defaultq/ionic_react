@@ -1,5 +1,7 @@
 {
   "name": "ionin_react",
-  "integrations": {},
+  "integrations": {
+    "capacitor": {}
+  },
   "type": "react"
 }

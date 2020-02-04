@@ -1,18 +1,12 @@
 import React from "react";
 import {
-  IonSelectOption,
-  IonSelect,
-  IonItemDivider,
-  IonContent,
+   IonContent,
   IonHeader,
-  IonItem,
-  IonLabel,
-  IonList,
-  IonPage,
+   IonPage,
   IonTitle,
   IonToolbar,
-  IonInput
-} from "@ionic/react";
+ } from "@ionic/react";
+ 
 import Converter from "../components/converter";
 
 const Tab2: React.FC = () => {
@@ -20,7 +14,7 @@ const Tab2: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>C to C</IonTitle>
+          <IonTitle>Currency</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>
