@@ -9,17 +9,18 @@ import {
   IonItem,
   IonList,
   IonRow,
-  IonCol,IonInput,IonSelect,IonSelectOption,IonButton, IonApp, 
+  IonCol,IonInput,IonSelect,IonSelectOption,IonButton, IonApp, IonLabel, 
 } from '@ionic/react';
 
 class CryptoConverter extends Component {
   state = {
     currencies: ["BTC", "ETH", "XRP", "BCH", "USDT"],
     base: "BTC",
-    amount: "",
+    amount: null,
     convertTo: "ETH",
-    result: "",
-    date: ""
+    result: null,
+    date: "",
+    error:""
   };
 
   handleSelect = e => {
@@ -45,13 +46,17 @@ class CryptoConverter extends Component {
 
   calculate = () => {
     const amount = this.state.amount;
-    if (amount === isNaN) {
+    if (amount === isNaN || amount === null) {
       return;
     } else {
+      // console.log(typeof(amount));
       fetch(`https://rest.coinapi.io/v1/exchangerate/${this.state.base}/${this.state.convertTo}`,{
         headers: {
             'X-CoinAPI-Key':'C93219A8-A3B9-4DC2-8939-977AAB0B89D8',
+            // 'X-CoinAPI-Key':'762BD833-CF7B-440A-B19C-7D3118669550',
               }})
+              
+        .then(this.handleErrors)
         .then(res => res.json())
         .then(data => {
             console.log(data);
@@ -59,11 +64,29 @@ class CryptoConverter extends Component {
           const result = (data.rate * amount).toFixed(10);
           this.setState({
             result,
-            date
+            date,
+            error:""
           });
+        })
+        .catch(data =>{
+          console.log(data)
         });
     }
   };
+   handleErrors = response => {
+     if (!response.ok) {
+       console.log(response);
+        const error = response.statusText;
+       this.setState({
+          error:error,
+          base: null,
+          result: null,
+
+       });
+       throw Error(response.statusText);
+     }
+     return response;
+   }
 
   handleSwap = e => {
     const base = this.state.base;
@@ -79,7 +102,7 @@ class CryptoConverter extends Component {
     );
   };
   render() {
-    const { currencies, base, amount, convertTo, result, date } = this.state;
+    const { currencies, base, amount, convertTo, result, date, error} = this.state;
     return (
       <IonApp>
           <IonRow>
@@ -89,20 +112,29 @@ class CryptoConverter extends Component {
                           <IonCardTitle> Converter</IonCardTitle>
                       </IonCardHeader>
                       <IonCard>
-
+                        {error &&
+                        
+                        <IonItem color="danger">
+                          <IonLabel>
+                          {error}
+                          </IonLabel>
+                        </IonItem>
+                        }
+                        
                         <IonCardHeader>
                           <IonCardSubtitle>{amount} {base} is equevalent to</IonCardSubtitle>
-                          <IonCardTitle>{amount === ""
+                          <IonCardTitle>{amount === null
                                 ? "0"
                                 : result === null
                                 ? "Calculating..."
                                 : result}{" "}
-                              {convertTo}</IonCardTitle>
+                              {convertTo}
+                          </IonCardTitle>
                         </IonCardHeader>
                         <IonCardContent>
-                        <p>As of {amount === "" ? "/ / /" : date === null ? "" : date}</p>
+                          <p>As of {amount === "" ? "/ / /" : date === null ? "" : date}</p>
                         </IonCardContent> 
-                        </IonCard>
+                      </IonCard>
                         
                       <IonCardContent>
                         <IonInput type="number" value={amount} placeholder="0" onIonChange={this.handleInput} ></IonInput>
@@ -123,7 +155,7 @@ class CryptoConverter extends Component {
                       <IonCardContent>
                         <IonInput disabled={true}
                                 value={
-                                  amount === ""
+                                  amount === null
                                     ? "0"
                                     : result === null
                                     ? "Calculating..."
@@ -144,9 +176,9 @@ class CryptoConverter extends Component {
                         </IonList>
                       </IonCardContent>
                       <IonCardContent>
-                      <IonButton onIonClick={this.handleSwap}>
-                          <IonIcon icon="swap"/>
-                      </IonButton>
+                      <IonButton color="primary" onClick={this.handleSwap}>
+                        <IonIcon icon="swap"></IonIcon>
+                        </IonButton>
                       </IonCardContent>
                     </IonCard>
                 </IonCol>
